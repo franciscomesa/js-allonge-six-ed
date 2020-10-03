@@ -1,0 +1,18 @@
+{
+  "name": "js-allonge-six-ed",
+  "version": "1.0.0",
+  "description": "Javascript Allonge the \"six\" Edicion: testing examples",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "javascript",
+    "testing",
+    "book",
+    "Reg",
+    "Braithwaite"
+  ],
+  "author": "Francisco Mesa",
+  "license": "MIT"
+}
