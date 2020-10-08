@@ -1,0 +1,1 @@
+console.log('Testing Javascript Allonge "six" edition code')
