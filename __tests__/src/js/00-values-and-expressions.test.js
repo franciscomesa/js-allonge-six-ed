@@ -1,9 +1,12 @@
 /**
  * 
 
- Chapter: Prelude: Values and Expressions over Coffee
+ Chapter 0: Prelude: Values and Expressions over Coffee
+            Preludio: valores y expresiones
+https://leanpub.com/javascriptallongesix/read#leanpub-auto-prelude-values-and-expressions-over-coffee
 
- */
+
+*/
 
 
 /* values are expressions 

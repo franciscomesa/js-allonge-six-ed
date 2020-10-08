@@ -1,9 +1,11 @@
 /**
  * 
 
- Chapter: A Rich Aroma: Basic Numbers
-
-
+* Chapter 1: A Rich Aroma: Basic Numbers
+             Un rico aroma: números básicos
+* https://leanpub.com/javascriptallongesix/read#leanpub-auto-a-rich-aroma-basic-numbers
+        floating
+        operations on numbers
 
 
 Javascript has a collection of literals.
