@@ -25,13 +25,10 @@ const {
     codeStatementWithReturn, 
     codeStatementWithReturnDeadCode,
     diameterCalculator,
+    grandparentFunction,
+    curryingGranparentFunction,
 
-
-    codeStatementImplicitReturn, 
-    
-    
-    emptyBlock, 
-    sum
+    codeStatementImplicitReturn
 } = require ('../../../src/js/02-The-first-sip-basic-functions');
 
 describe('As Little As Possible About Functions, But No Less (Pag 7-15)', () => {
@@ -75,6 +72,7 @@ describe('As Little As Possible About Functions, But No Less (Pag 7-15)', () => 
         We can make a function that returns a value by putting the value to the right of the arrow.
         */
         expect( (() => 1+1)() ).toBe(2);
+        expect( codeStatementImplicitReturn() ).toBe(2);
         expect( (() => 'Hello, ' + 'Javascript')() ).toBe('Hello, Javascript');
         /* Special number */
         expect( (() => Infinity * Infinity)() ).toBe(Infinity);
@@ -138,6 +136,9 @@ describe('As Little As Possible About Functions, But No Less (Pag 7-15)', () => 
     });
 
     test('Explicit function return a value: return keyword ', () => {
+        /* 
+        A return statement accepts any valid JavaScript expression.
+        */
         expect (  ( () => {return 0} )()  ).toBe(0);
         expect (  ( () => {return 1} )()  ).toBe(1);
         expect (  ( () => {return 'Hello ' + 'World'} )()  ).toBe('Hello World');
@@ -182,41 +183,154 @@ describe('Ah. I’d Like to Have an Argument, Please. (Pag 16-20)', () => {
         expect( ( (room, board) => room + board  )(800, 150)  ).toBe(950);
     });
 
+    /* return definition is recursive. we can write a function that returns a function, or an array that contains another array expression. Or a function that returns an array, an array of functions, a function that returns an array of functions, and so forth: */
+
+    test ('call by value', () =>  {
+        expect( diameterCalculator(1+1) ).toBe(6.2831853);
+    } );
+    
+    test('variables and bindings', () => {
+        /* Synchronize dictionary:   
+            (diameter) => diameter * 3.14159265
+            x => (y) => x
+            -----
+            first x   = argument
+            y         = argument
+            second x  = expression referring to a variable
+
+            Las funciones generan entorno (skope) y binding valores
+        */
+    });
+
+    test ('call by sharing (value types vs reference types): not modify primitive type arguments', () => {
+        const PI = 3.14159265;
+        expect(PI).toBe(3.14159265);
+    });
+
+    // JavaScript does not place copies of reference values in any environment. 
+    // JavaScript places references to reference types in environments, and when the value needs to be used,
+    // JavaScript uses the reference to obtain the original
+    // Functions are referenced values
+    test ('call by sharing (value types vs reference types): modify referenced value arguments', () => {
+        const PI = 3.14159265;
+        const doubleNumber = n => { 
+                n = n * 2;
+                return n;
+            }
+        const numberDoubled = doubleNumber(PI);
+        expect(PI).toBe(3.14159265);
+        expect(numberDoubled).toBe(6.2831853);
+    });
+
+    test ('call by sharing: modify referenced value arguments', () => {
+        // a function will modify a reference passed as argument when modifying its attributes
+        const original = {
+            a: 1,
+            b: 2
+          };
+    
+          const doubleNumber = n => {
+            n.a = n.a * 2;
+            n.b = n.b * 2;
+            return n;
+          };
+    
+          const modified = doubleNumber(original);
+          expect(original).toStrictEqual(modified);
+    });
+
+    test ('call by sharing: dont modify referenced value arguments using a local copy', () => {
+        // a function will not modify a reference passed as argument if you create a new one
+        const original = {
+            a: 1,
+            b: 2
+          };
+          const doubleNumber = n => {
+              n = {
+                a : n.a * 2,
+                b : n.b * 2
+                }
+            return n;
+          };
+    
+          const modified = doubleNumber(original);
+          expect(original).not.toStrictEqual(modified);
+          expect(original.a).toBe(1);
+          expect(modified.a).toBe(2);
+    });
+
+
+
 
 });
 
-describe('Closures and Scope', () => {
+describe('Closures and Scope [cierres y alcance] (Pag 21-25)', () => {
+
+    test('Function within a function', () => {
+        /* 
+            ((x) => (y) => x)(1)(2) //=> 1
+            ((x) => (y) => x)(1) //=> [Function]
+            (y) => x
+            ((y) => x)(2)
+        */
+        expect(((x) => (y) => x)(1)(2)).toBe(1);
+    });
+
+    test('if functions without free variables are pure, are closures impure?', () => {
+        // Free variables: a variable which is not bound within the function
+        //      (y) => x  // x is a free variable
+        // PURE FUNCTIONS:  functions containing NO free variables, 
+        //                    but they can contain a closure
+        // CLOSURE:         function containing ONE or MORE free variables
+        
+        // (y) => x has a free variable, but all refers to "(x) =>", doesnt have a free variable
+        expect(((x) => (y) => x)(1)(2)).toBe(1);
+        
+    });
+
+    test('it’s always the environment', () => {
+        /*
+        I Combinator = Función identidad. (x) => x
+        K Combinator = Kestrel            (y) => x  
+        */
+    });
+
+    test('Functions can have grandparents too', () => {
+        /*        
+        https://en.wikipedia.org/wiki/Currying
+        */
+
+            expect(grandparentFunction(1)(2)(3)).toBe(6);
+    });
+    test('Currying: ', () => {
+        /*
+        Currying: technique of converting a function that takes multiple arguments into a sequence of functions that each take a single argument.
+        */
+       expect( ( (x,y,z) => x + y + z )(1,2,3)).toBe(6);
+       expect( curryingGranparentFunction(1, 2, 3)).toBe(6);
+    });
+
+    test('Shadowy variables from a shadowy planet: first x is overwrited by the second one', () => {
+        /*  JavaScript always searches for a binding starting with the functions own environment and then each parent in turn until it finds one 
+            When a variable has the same name as an ancestor environment’s binding, it is said to shadow the ancestor
+        */
+
+        expect( ( (x) => (x,y) => x + y )(4)(1, 2) ).toBe(3);
+    });
+    
+    test ('which came first, the chicken or the egg?', () => {
+        /*
+        Javascript have allways Global environment
+
+        Many programmers choose to write every JavaScript file like this:
+            // top of the file
+            (() => {
+                // ... lots of JavaScript ...
+            })();
+            // bottom of the file
+
+        */
+
+    });
 
 });
-
-describe('That Constant Coffee Craving', () => {
-
-});
-
-describe('Naming Functions', () => {
-
-});
-
-describe('Combinators and Function Decorators', () => {
-
-});
-
-describe('Building Blocks', () => {
-
-});
-
-describe('Magic Names', () => {
-
-});
-
-describe('Summary', () => {
-
-});
-
-
-
-
-
-
-
-

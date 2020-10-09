@@ -22,10 +22,11 @@ exports.blockWithOneExpression = () => { 2 + 2 };
 exports.blockWithTwoExpression = () => { 1 + 1; 2 + 2 };
 exports.blockWithCommaOperator = () => (1 + 1, 2 + 2);
 exports.codeStatementWithReturn = () => { 1+1; return 2+2};
-exports.codeStatementWithReturnDeadCode = () => {return 1+1; 2+2};
+exports.codeStatementWithReturnDeadCode = () => {return 1+1; 2+2}; // Dead Code: 2+2
 exports.diameterCalculator = (diameter) => diameter * 3.14159265;
+exports.codeStatementImplicitReturn = () => 1 + 1;
+exports.grandparentFunction = (x) => (y) => (z) => x + y + z;
+exports.curryingGranparentFunction = (x, y, z) => x + y+ z;
 
-exports.codeStatementImplicitReturn = () => 2 + 2;
+
 exports.sum = (a, b) => a + b;
-// return statement that immediately terminates the function application 
-// and returns the result of evaluating its expression
